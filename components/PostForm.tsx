@@ -1,13 +1,10 @@
-'use client'
-
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { TextInput, Textarea, Button, Stack } from '@mantine/core';
 import { Post } from '@/utils/types';
 
-
 interface PostFormProps {
   initialData?: Partial<Post>;
-  onSubmit: (data: Partial<Post>) => void;
+  onSubmit: (data: Omit<Post, 'id'>) => void;
 }
 
 const PostForm: React.FC<PostFormProps> = ({ initialData = {}, onSubmit }) => {
@@ -16,12 +13,12 @@ const PostForm: React.FC<PostFormProps> = ({ initialData = {}, onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ title, body });
+    onSubmit({ title, body, userId: initialData.userId || 1 });
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack >
+      <Stack>
         <TextInput
           label="Title"
           value={title}
@@ -33,8 +30,6 @@ const PostForm: React.FC<PostFormProps> = ({ initialData = {}, onSubmit }) => {
           value={body}
           onChange={(e) => setBody(e.currentTarget.value)}
           required
-          resize='vertical'
-          size='lg'
         />
         <Button type="submit" color="blue">
           Submit

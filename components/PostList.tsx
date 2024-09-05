@@ -1,29 +1,23 @@
 'use client'
 
-import { useState, useEffect } from 'react';
-import { Card, Text, Button, Loader } from '@mantine/core';
+import { Card, Text, Button } from '@mantine/core';
 import Link from 'next/link';
-import { getPosts, deletePost } from '../utils/api';
-import { Post } from '@/utils/types';
+import { notifications } from '@mantine/notifications';
+import { usePostContext } from '@/context/PostContext';
 
 const PostList: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+    const { posts, deletePost } = usePostContext();
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const fetchPosts = async () => {
-    const response = await getPosts();
-    setPosts(response.data);
+  const handleDelete = (id: number) => {
+    deletePost(id);
+    notifications.show({
+      title: 'Post Deleted',
+      message: 'The post has been successfully deleted.',
+      color: 'green',
+      position: "bottom-right"
+    });
   };
 
-  const handleDelete = async (id: number) => {
-    await deletePost(id);
-    setPosts(posts.filter(post => post.id !== id));
-  };
-
-  if(!posts || posts.length === 0) return <div className='h-screen w-full flex justify-center items-center'><Loader/></div>
 
   return (
     <div className='flex gap-4 flex-wrap w-full'>

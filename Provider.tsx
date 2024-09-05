@@ -1,6 +1,8 @@
 'use client'
 
 import { createTheme, MantineProvider } from "@mantine/core"
+import { Notifications } from "@mantine/notifications";
+import { PostProvider } from "./context/PostContext";
 
 export const Provider = ({children}: {children : React.ReactNode})=>{
     const myTheme = createTheme({
@@ -13,7 +15,10 @@ export const Provider = ({children}: {children : React.ReactNode})=>{
       });
 return (
     <MantineProvider theme={myTheme}  forceColorScheme={'dark'}>
+        <Notifications />
+        <PostProvider>
         {children}
+        </PostProvider>
     </MantineProvider>
 )
 }
